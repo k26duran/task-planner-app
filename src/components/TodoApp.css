@@ -1,0 +1,13 @@
+#addButtom{
+    background-color: #f44336;
+    float:  right;
+    margin-top: 10px;
+}
+#newTodo{
+    text-align: center;
+  
+}
+#todoList{
+    text-align: center;
+  
+}
