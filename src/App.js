@@ -2,12 +2,14 @@ import React from 'react';
 import './App.css';
 import {Login} from './components/Login';
 import {TodoApp} from './components/TodoApp';
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch , Route } from 'react-router-dom';
 function LoggedIn(login){
+  const loginView =() =>(<Login></Login>);
+  const todoAppView =() =>(<TodoApp></TodoApp>);
   if(!login){
-    return(<Login></Login>);
+    return(<div><Route exact path="/" component={loginView}></Route></div>);
   }else{
-    return(<TodoApp></TodoApp>);
+    return(<div><Route component={todoAppView}></Route></div>);
   }
 }
 function App() {
@@ -17,9 +19,11 @@ function App() {
   const login=localStorage.getItem('isLoggedIn');
   return (
     <Router>
-      <div className="App">
+      <Switch>
+      
         {LoggedIn(login)}
-      </div>
+      
+      </Switch>
     </Router>
   );
 }

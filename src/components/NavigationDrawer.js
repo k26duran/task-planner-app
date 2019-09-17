@@ -70,7 +70,7 @@ export default function NavigationDrawer() {
     <Divider />  
       {['Log Out'].map((text, index) => (
           <ListItem button key={text} onClick={logOut}>
-            <ListItemIcon><ExitToAppIcon /> </ListItemIcon>
+            <ListItemIcon id="logout"><ExitToAppIcon /> </ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}

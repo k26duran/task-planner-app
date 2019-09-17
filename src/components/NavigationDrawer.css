@@ -1,3 +1,7 @@
 #modify {
     margin: auto;
 }
+#logout{
+    position: relative;
+    margin-top: 10px;
+}
