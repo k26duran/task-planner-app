@@ -9,7 +9,7 @@ function LoggedIn(login){
   if(!login){
     return(<div><Route exact path="/" component={loginView}></Route></div>);
   }else{
-    return(<div><Route component={todoAppView}></Route></div>);
+    return(<div><Route exact path="/home" component={todoAppView}></Route></div>);
   }
 }
 function App() {

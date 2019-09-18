@@ -16,7 +16,7 @@ import './NavigationDrawer.css';
 
 function logOut() {
   localStorage.removeItem("isLoggedIn");
-  window.location.reload();
+  window.location.href = "/";
 }
 
 export default function NavigationDrawer() {

@@ -19,13 +19,15 @@ export class Login extends React.Component{
         this.handlePasswdChange = this.handlePasswdChange.bind(this);
     }
 
-    loggedIn(){
+    loggedIn(e){
+        e.preventDefault();
         const email = document.getElementById("email").value; 
         const password = document.getElementById("password").value;
         if(email!=="" && password!==""){
             localStorage.setItem('email', email);
             localStorage.setItem('password',password);
             localStorage.setItem('isLoggedIn', true);
+            window.location.href = "/home";
         }
     }
     

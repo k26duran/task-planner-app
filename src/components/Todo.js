@@ -23,14 +23,14 @@ export class Todo extends React.Component {
         return (
             <Card id="card">
                 <CardHeader id="cardHeader" avatar={<Avatar id="avatar" src={this.getIcon(this.props.status)}> </Avatar>}
-                title={<h2>{"Autor: "+localStorage.getItem("email")}</h2>}
+                title={"Autor: "+localStorage.getItem("email")}
                 subheader={"Priority: "+this.props.priority}> </CardHeader> 
                 <CardContent>
-                    < Typography variant="body" component="h5" >
-                        Description : {this.props.text}
+                    < Typography variant="body2" component="p" id="cardHeader" >
+                        <strong>Description :</strong> {this.props.text}
                     </Typography >
                     < Typography variant="body2" component="p"  >
-                        {this.props.status} - {this.props.dueDate.format('DD-MM-YYYY')}
+                        <i>{this.props.status} - {this.props.dueDate.format('DD-MM-YYYY')}</i>
                     </Typography >
                 </CardContent>
             </Card>
