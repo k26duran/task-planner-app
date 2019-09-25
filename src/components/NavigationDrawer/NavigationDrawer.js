@@ -54,7 +54,7 @@ export default function NavigationDrawer() {
                 className="inline"
                 color="textPrimary"
               >
-                Karen Duran
+                {localStorage.getItem("name")}
               </Typography>
               {localStorage.getItem("email")}
             </React.Fragment>

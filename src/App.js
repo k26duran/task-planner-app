@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-import {Login} from './components/Login';
-import {TodoApp} from './components/TodoApp';
+import {Login} from './components/Login/Login';
+import {UserProfile} from './components/UserProfile/UserProfile';
 import { BrowserRouter as Router, Switch , Route } from 'react-router-dom';
 function LoggedIn(login){
   const loginView =() =>(<Login></Login>);
-  const todoAppView =() =>(<TodoApp></TodoApp>);
+  const todoAppView =() =>(<UserProfile></UserProfile>);
   if(!login){
     return(<div><Route exact path="/" component={loginView}></Route></div>);
   }else{
