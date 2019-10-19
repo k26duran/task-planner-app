@@ -1,0 +1,45 @@
+.task {
+    width: 15%;
+    height: auto;
+}
+
+.btnCreateTask {
+    margin-top: 10%;
+}
+
+.btnUpdateTask {
+    margin-top: 10%;
+}
+
+#createTask {
+    background: none;
+    border: none;
+    color: white;
+}
+
+#updateTask {
+    background: none;
+    border: none;
+    color: white;
+}
+
+.cardTask {
+    background: none;
+    border: none;
+    text-align: left;
+    width: 100%;
+}
+#addButton{
+    background: #f44336;
+    float:  right;
+    margin-top: 10px;
+}
+#newTodo{
+    text-align: center;
+    margin-top: 10px;
+  
+}
+#todoList{
+    text-align: center;
+  
+}

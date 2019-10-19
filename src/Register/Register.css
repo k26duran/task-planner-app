@@ -1,0 +1,19 @@
+.registerTitle {
+    margin-top: 10%;
+    margin-bottom: 5%;
+    text-align: center;
+}
+
+.btnRegister {
+    text-align: center;
+}
+
+.loginText {
+    margin-top: 5%;
+    text-align: center;
+}
+
+.avatar {
+    width: 25%;
+    height: auto;
+}

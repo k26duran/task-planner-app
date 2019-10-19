@@ -1,0 +1,19 @@
+.btnBack {
+    font-size: 1.5em;
+}
+
+.avatarProfile {
+    width: 50%;
+    height: auto;
+    margin-top: 10%;
+}
+
+#createTask {
+    background: none;
+    border: none;
+    color: white;
+}
+
+#submit {
+    color: white;
+}

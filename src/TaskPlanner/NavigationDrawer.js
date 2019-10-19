@@ -13,10 +13,11 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
 import './NavigationDrawer.css';
+import {Link, Redirect} from "react-router-dom";
 
 function logOut() {
-  localStorage.removeItem("isLoggedIn");
-  window.location.href = "/";
+    localStorage.removeItem("isLoggedIn");
+
 }
 
 export default function NavigationDrawer() {
@@ -54,23 +55,24 @@ export default function NavigationDrawer() {
                 className="inline"
                 color="textPrimary"
               >
-                {localStorage.getItem("name")}
+                {localStorage.getItem("username")}
               </Typography>
-              {localStorage.getItem("email")}
+              
             </React.Fragment>
           }
         />
-    <IconButton color="secondary" id="modify" onClick={logOut}>
+    <Link to="/profile">
+    <IconButton color="secondary" id="modify" >
           <EditIcon></EditIcon>
     </IconButton>
-    
+    </Link>
     </ListItem>
     <ListItem alignItems="flex-start">
     </ListItem>
     <Divider />  
       {['Log Out'].map((text, index) => (
           <ListItem button key={text} onClick={logOut}>
-            <ListItemIcon id="logout"><ExitToAppIcon /> </ListItemIcon>
+            <Link to="/"><ListItemIcon id="logout"><ExitToAppIcon /></ListItemIcon></Link>
             <ListItemText primary={text} />
           </ListItem>
         ))}
@@ -79,7 +81,7 @@ export default function NavigationDrawer() {
   );
   return (
     <div>
-      <IconButton className="btn" aria-label="Menu" onClick={toggleDrawer('left', true)}>
+      <IconButton aria-haspopup="true" className="btn" aria-label="Menu" color="inherit" onClick={toggleDrawer('left', true)}>
           <Menu></Menu>
       </IconButton>
       <Drawer open={state.left} onClose={toggleDrawer('left', false)}>

@@ -1,0 +1,31 @@
+#updateProfile {
+    background: none;
+    border: none;
+    color: white;
+}
+
+.btnCreateTask {
+    text-align: right;
+    margin-right: 7%;
+    margin-bottom: 5%;
+}
+
+.iconNewTask {
+    color: white;
+}
+#addButton{
+    background-color: #f44336;
+    float:  right;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    margin-right: 15px;
+}
+#newTodo{
+    text-align: center;
+    margin-top: 10px;
+  
+}
+#todoList{
+    text-align: center;
+  
+}
