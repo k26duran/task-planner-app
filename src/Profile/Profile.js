@@ -11,16 +11,18 @@ import Paper from '@material-ui/core/Paper';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Divider from "@material-ui/core/Divider";
 import {Link, Redirect} from "react-router-dom";
+import axios from "axios";
 
 export class Profile extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            name: localStorage.getItem("name") ? localStorage.getItem("name") : "",
-            username: localStorage.getItem("username") ? localStorage.getItem("username") : "",
-            email: localStorage.getItem("email") ? localStorage.getItem("email") : "",
-            pwd: localStorage.getItem("pwd") ? localStorage.getItem("pwd") : "",
+            id:"",
+            name:  "",
+            username: "",
+            email:  "",
+            pwd:  "",
             isUpdated: false
         };
         this.handleNameInput = this.handleNameInput.bind(this);
@@ -28,6 +30,11 @@ export class Profile extends React.Component {
         this.handleEmailInput = this.handleEmailInput.bind(this);
         this.handlePwdInput = this.handlePwdInput.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
+        this.axios = axios.create({
+            baseURL: 'http://localhost:8081/taskPlanner/v1/',
+            timeout: 1000,
+            headers: {'Authorization': 'Bearer ' + localStorage.getItem("tokenAuthentication")}
+        });
     }
 
     handleNameInput(e) {
@@ -56,14 +63,39 @@ export class Profile extends React.Component {
         localStorage.setItem("username", username);
         localStorage.setItem("email", email);
         localStorage.setItem("pwd", pwd);
-        alert("Success: you have updated your profile!");
-        this.setState({
-            name: localStorage.getItem("name") ? localStorage.getItem("name") : "",
-            username: localStorage.getItem("username") ? localStorage.getItem("username") : "",
-            email: localStorage.getItem("email") ? localStorage.getItem("email") : "",
-            pwd: localStorage.getItem("pwd") ? localStorage.getItem("pwd") : "",
-            isUpdated: true
-        });
+        
+        localStorage.setItem("user", email);
+        const self = this;
+        this.axios.put("http://localhost:8081/taskPlanner/v1/users", {
+            id: this.state.id,
+            name: name,
+            username: username,
+            email: email,
+            password: pwd
+        })
+            .then(function (response) {
+                alert("Success update profile!");
+                self.setState({isUpdated: true});
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+    componentDidMount() {
+        const self = this;
+        this.axios.get("http://localhost:8081/taskPlanner/v1/users/usernameEmail/" + localStorage.getItem("user"))
+            .then(function (response) {
+                self.setState({
+                    id: response.data.id,
+                    name: response.data.name,
+                    username: response.data.username,
+                    email: response.data.email,
+                    pwd: response.data.password,
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     render() {

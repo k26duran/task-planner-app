@@ -17,11 +17,12 @@ import {Link, Redirect} from "react-router-dom";
 
 function logOut() {
     localStorage.removeItem("isLoggedIn");
+    localStorage.clear();
 
 }
 
 export default function NavigationDrawer() {
-
+  
   const [state, setState] = React.useState({
     lefft: false
   });
@@ -55,7 +56,7 @@ export default function NavigationDrawer() {
                 className="inline"
                 color="textPrimary"
               >
-                {localStorage.getItem("username")}
+                {localStorage.getItem("user")}
               </Typography>
               
             </React.Fragment>
@@ -71,10 +72,12 @@ export default function NavigationDrawer() {
     </ListItem>
     <Divider />  
       {['Log Out'].map((text, index) => (
-          <ListItem button key={text} onClick={logOut}>
-            <Link to="/"><ListItemIcon id="logout"><ExitToAppIcon /></ListItemIcon></Link>
+          <Link to="/">
+            <ListItem button key={text} onClick={logOut}>
+            <ListItemIcon id="logout"><ExitToAppIcon /></ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
+          </Link>
         ))}
     </List>
     </div>

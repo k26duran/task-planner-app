@@ -18,10 +18,7 @@ export class Task extends React.Component {
                 description: this.props.description,
                 status: this.props.status,
                 dueDate: this.props.dueDate,
-                responsible: {
-                    name: this.props.responsible.name,
-                    email: this.props.responsible.email
-                },
+                responsible: this.props.responsible,
                 priority:this.props.priority
             },
             update: false
@@ -52,9 +49,12 @@ export class Task extends React.Component {
             <button className="cardTask" onClick={this.handleOnUpdate}>
                 <Card id="card">
                     <CardHeader id="cardHeader" avatar={<Avatar id="avatar" style={{width:"50px", height:"50px"}} src={this.getIcon(this.state.task.status)}> </Avatar>}
-                    title={"Responsible: "+ this.state.task.responsible.name}
+                    title={"Responsible: "+( this.state.task.responsible !== null ? this.state.task.responsible.name: "No hay responsable.")}
                     subheader={"Task: "+this.state.task.title}> </CardHeader> 
                     <CardContent>
+                    < Typography variant="body2" component="p" id="cardHeader" >
+                            <strong>Priority :</strong> {this.state.task.priority}
+                        </Typography >
                         < Typography variant="body2" component="p" id="cardHeader" >
                             <strong>Description :</strong> {this.state.task.description}
                         </Typography >

@@ -9,6 +9,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import axios from "axios";
 
 export class Login extends React.Component {
 
@@ -37,19 +38,31 @@ export class Login extends React.Component {
         const user = this.state.user;
         const pwd = this.state.pwd;
         if (!user.length || !pwd.length) {
-            alert("You must enter your email or username and password.");
+            alert("Incorrect credentials... Try Again!");
             return;
         }
-        const localUsername = localStorage.getItem("username");
-        const localEmail = localStorage.getItem("email");
-        const localPwd = localStorage.getItem("pwd");
-        if ((localUsername !== user || localEmail !== user) && localPwd !== pwd) {
-            alert("Incorrect credentials. Try again!");
-            return;
+        let usernameL = null;
+        let emailL = null;
+        if (user.includes("@")) {
+            emailL = user;
         } else {
-            this.setState({isLoggedIn: true});
-            localStorage.setItem("isLoggedIn", "true");
+            usernameL = user;
         }
+        localStorage.setItem("user", this.state.user);
+        const self = this;
+        axios.post('http://localhost:8081/taskPlanner/v1/user/login', {
+            username: usernameL,
+            email: emailL,
+            password: pwd
+        })
+            .then(function (response) {
+                localStorage.setItem("tokenAuthentication", response.data.accessToken);
+                self.setState({isLoggedIn: true});
+            })
+            .catch(function (error) {
+                alert("Something happened... Try again!");
+                console.log(error);
+            });
     }
 
     render() {

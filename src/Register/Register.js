@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Divider from "@material-ui/core/Divider";
 import {Link, Redirect} from "react-router-dom";
+import axios from "axios";
 
 export class Register extends React.Component {
 
@@ -60,26 +61,28 @@ export class Register extends React.Component {
         const pwd = this.state.pwd;
         const pwdVerify = this.state.pwdVerify;
         if (!name.length || !username.length || !email.length || !pwd.length || !pwdVerify.length) {
-            alert("You must enter all fields.");
+            alert("Complete de spaces, try again!");
             return;
         }
         if (pwd !== pwdVerify) {
-            alert("Verify password.");
+            alert("Verify password. Try again!");
             return;
         }
-        localStorage.setItem("name", name);
-        localStorage.setItem("username", username);
-        localStorage.setItem("email", email);
-        localStorage.setItem("pwd", pwd);
-        alert("Success: you have registered!");
-        this.setState({
-            name: "",
-            username: "",
-            email: "",
-            pwd: "",
-            pwdVerify: "",
-            isRegistered: true
-        });
+        const self = this;
+        axios.post('http://localhost:8081/taskPlanner/v1/user/register', {
+            name: self.state.name,
+            username: self.state.username,
+            email: self.state.email,
+            password: self.state.pwd
+        })
+            .then(function (response) {
+                alert("Success registration!");
+                self.setState({isRegistered: true});
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert("Error... Try again!");
+            });
     }
 
     render() {

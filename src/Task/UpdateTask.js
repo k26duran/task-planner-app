@@ -13,23 +13,19 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import CheckIcon from '@material-ui/icons/Check';
 import moment from "moment";
 
+
 export class UpdateTask extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            updatedTask: {
-                id: this.props.location.state,
-                title: "",
-                description: "",
-                status: "",
-                dueDate: moment(),
-                responsible: {
-                    name: "",
-                    email: ""
-                },
-                priority:0
-            },
+            id: this.props.location.state,
+            title: "",
+            description: "",
+            status: "",
+            dueDate: moment(),
+            responsible:"",
+            priority:0,
             isUpdated: false
         };
         this.handleTitle = this.handleTitle.bind(this);
@@ -39,144 +35,98 @@ export class UpdateTask extends React.Component {
         this.handleResponsible = this.handleResponsible.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handlePriority = this.handlePriority.bind(this);
+        this.axios = axios.create({
+            baseURL: 'http://localhost:8081/taskPlanner/v1/',
+            timeout: 1000,
+            headers: {'Authorization': 'Bearer ' + localStorage.getItem("tokenAuthentication")}
+        });
     }
 
     handleTitle(e) {
-        e.persist();
-        this.setState(prevState => ({
-            updatedTask: {
-                id: prevState.updatedTask.id,
-                title: e.target.value,
-                description: prevState.updatedTask.description,
-                status: prevState.updatedTask.status,
-                dueDate: prevState.updatedTask.dueDate,
-                responsible: {
-                    name: prevState.updatedTask.responsible.name,
-                    email: prevState.updatedTask.responsible.email
-                }
-            }
-        }));
+        this.setState({title: e.target.value});
     }
 
     handleDescription(e) {
-        e.persist();
-        this.setState(prevState => ({
-            updatedTask: {
-                id: prevState.updatedTask.id,
-                title: prevState.updatedTask.title,
-                description: e.target.value,
-                status: prevState.updatedTask.status,
-                dueDate: prevState.updatedTask.dueDate,
-                responsible: {
-                    name: prevState.updatedTask.responsible.name,
-                    email: prevState.updatedTask.responsible.email
-                },
-                priority: prevState.updatedTask.priority
-            }
-        }));
+        this.setState({description: e.target.value});
     }
     handlePriority(e) {
-        e.persist();
-        this.setState(prevState => ({
-            updatedTask: {
-                id: prevState.updatedTask.id,
-                title: prevState.updatedTask.title,
-                description: prevState.updatedTask.description,
-                status: prevState.updatedTask.status,
-                dueDate: prevState.updatedTask.dueDate,
-                responsible: {
-                    name: prevState.updatedTask.responsible.name,
-                    email: prevState.updatedTask.responsible.email
-                },
-                priority:e.target.value
-            }
-        }));
+        this.setState({priority: e.target.value});
     }
     handleStatus(e) {
-        e.persist();
-        this.setState(prevState => ({
-            updatedTask: {
-                id: prevState.updatedTask.id,
-                title: prevState.updatedTask.title,
-                description: prevState.updatedTask.description,
-                status: e.target.value,
-                dueDate: prevState.updatedTask.dueDate,
-                responsible: {
-                    name: prevState.updatedTask.responsible.name,
-                    email: prevState.updatedTask.responsible.email
-                },
-                priority: prevState.updatedTask.priority
-            }
-        }));
+        this.setState({status: e.target.value});
     }
 
     handleDueDate(e) {
-        e.persist();
-        this.setState(prevState => ({
-            updatedTask: {
-                id: prevState.updatedTask.id,
-                title: prevState.updatedTask.title,
-                description: prevState.updatedTask.description,
-                status: prevState.updatedTask.status,
-                dueDate: e.target.value,
-                responsible: {
-                    name: prevState.updatedTask.responsible.name,
-                    email: prevState.updatedTask.responsible.email
-                },
-                priority: prevState.updatedTask.priority
-            }
-        }));
+        this.setState({dueDate: e.target.value});
     }
 
     handleResponsible(e) {
-        e.persist();
-        this.setState(prevState => ({
-            updatedTask: {
-                id: prevState.updatedTask.id,
-                title: prevState.updatedTask.title,
-                description: prevState.updatedTask.description,
-                status: prevState.updatedTask.status,
-                dueDate: prevState.updatedTask.dueDate,
-                responsible: {
-                    name: e.target.value,
-                    email: e.target.value + "@mail.com"
-                },
-                priority: prevState.updatedTask.priority
-            }
-        }));
+        this.setState({responsible: e.target.value});
     }
 
-    handleUpdate(e) {
+    async handleUpdate(e) {
         e.preventDefault();
+        const title = this.state.title;
+        const description = this.state.description;
+        const status = this.state.status;
+        const dueDate = this.state.dueDate;
+        const responsible = this.state.responsible;
+        const priority = this.state.priority;
+        let ok = true;
         const self = this;
-        axios.put("http://localhost:8081/taskPlanner/v1/tasks", self.state.updatedTask)
+        await this.axios.put("http://localhost:8081/taskPlanner/v1/tasks", {
+            id: this.state.id,
+            title: title,
+            description: description,
+            status: status,
+            dueDate: dueDate,
+            responsible: null,
+            priority:priority
+        })
             .then(function (response) {
-                alert("Success: you have updated the task!");
-                self.setState({isUpdated: true});
+                alert("Success updated task!");
             })
             .catch(function (error) {
-                console.log("Error: it could not update the task. --> " + error);
+                console.log("Error!!=" + error);
+                ok = ok && false;
             });
+        if (responsible.length) {
+            await this.axios.get("http://localhost:8081/taskPlanner/v1/users/usernameEmail/" + this.state.responsible)
+                .then(function (response) {
+                    self.setState({responsible: response.data});
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    ok = ok && false;
+                });
+            await this.axios.put("http://localhost:8081/taskPlanner/v1/users/tasks/" + this.state.id, this.state.responsible)
+                .then(function (response) {
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    ok = ok && false;
+                });
+        }
+        if (ok) {
+            this.setState({isUpdated: true});
+        }
     }
 
     componentDidMount() {
-        fetch("http://localhost:8081/taskPlanner/v1/tasks/" + this.state.updatedTask.id)
-            .then(response => response.json())
-            .then(data => {
-                this.setState(prevState => ({
-                    updatedTask: {
-                        id: data.id,
-                        title: data.title,
-                        description: data.description,
-                        status: data.status,
-                        dueDate: data.dueDate,
-                        responsible: {
-                            name: data.responsible.name,
-                            email: data.responsible.email
-                        },
-                        priority: data.priority
-                    }
-                }));
+        const self = this;
+        this.axios.get("http://localhost:8081/taskPlanner/v1/tasks/" + this.state.id)
+            .then(function (response) {
+                self.setState({
+                    title: response.data.title,
+                    description: response.data.description,
+                    status: response.data.status,
+                    dueDate: response.data.dueDate,
+                    responsible: response.data.responsible !== null ? response.data.responsible.email : "",
+                    priority: response.data.priority,
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
             });
     }
 
@@ -206,7 +156,7 @@ export class UpdateTask extends React.Component {
                         id="title"
                         label="Title"                  
                         onChange={this.handleTitle}
-                        value={this.state.updatedTask.title}
+                        value={this.state.title}
                         margin="normal"
                     ></TextField>
                     <br></br>
@@ -214,7 +164,7 @@ export class UpdateTask extends React.Component {
                         id="description"
                         label="Description"                  
                         onChange={this.handleDescription}
-                        value={this.state.updatedTask.description}
+                        value={this.state.description}
                         margin="normal"
                     >
                     </TextField>
@@ -224,7 +174,7 @@ export class UpdateTask extends React.Component {
                         label="Priority"
                         type="number"
                         onChange={this.handlePriority}
-                        value={this.state.updatedTask.priority}
+                        value={this.state.priority}
                         margin="normal"
                     >
                     </TextField>
@@ -233,7 +183,7 @@ export class UpdateTask extends React.Component {
                         id="status"
                         select
                         label="Status"
-                        value={this.state.updatedTask.status}
+                        value={this.state.status}
                         onChange={this.handleStatus}
                         margin="normal"
                         helperText="Please select a status"
@@ -248,7 +198,7 @@ export class UpdateTask extends React.Component {
                     id="dueDate"
                     type="date"
                     label="DueDate"
-                    value={this.state.updatedTask.dueDate}
+                    value={this.state.dueDate}
                     onChange={this.handleDueDate}
                 />
                 <br></br>
@@ -256,7 +206,7 @@ export class UpdateTask extends React.Component {
                     id="responsible"
                     label="Responsable"                  
                     onChange={this.handleResponsible}
-                    value={this.state.updatedTask.responsible.name}
+                    value={this.state.responsible.name}
                     margin="normal"
                 >
                 </TextField>

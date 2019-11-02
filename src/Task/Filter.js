@@ -28,7 +28,7 @@ export class Filter extends React.Component {
     }
 
     handleDueDateFilter(e) {
-        this.setState({dueDate: e});
+        this.setState({dueDate: e.target.value});
     }
 
     handlePriorityFilter(e) {
@@ -93,12 +93,13 @@ export class Filter extends React.Component {
                             ))}
                             </TextField>
                             <p></p>
-                            <DatePicker
-                                id="due-date"
-                                selected={this.state.dueDate}
-                                placeholderText="Due date"
-                                onChange={this.handleDueDateFilter}>
-                            </DatePicker>
+                            <TextField style={{}}
+                                id="dueDate"
+                                type="date"
+                                label="DueDate"
+                                value={this.state.dueDate}
+                                onChange={this.handleDueDateFilter}
+                            />
                             <br></br>
                             <br></br>
                             <Grid
