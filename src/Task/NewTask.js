@@ -25,6 +25,7 @@ export class NewTask extends React.Component {
             dueDate:  moment(),
             responsible: "",
             priority:0,
+            file:"",
             isCreated: false
         };
         this.handleTitle = this.handleTitle.bind(this);
@@ -34,13 +35,16 @@ export class NewTask extends React.Component {
         this.handleResponsible = this.handleResponsible.bind(this);
         this.handleCreate = this.handleCreate.bind(this);
         this.handlePriority= this.handlePriority.bind(this);
+        this.handleFile = this.handleFile.bind(this);
         this.axios = axios.create({
             baseURL: 'http://localhost:8081/taskPlanner/v1/',
             timeout: 1000,
             headers: {'Authorization': 'Bearer ' + localStorage.getItem("tokenAuthentication")}
         });
     }
-
+    handleFile(e){
+        this.setState({file : e.target.files[0]});
+    }
     handleTitle(e) {
         this.setState({title: e.target.value});
     }
@@ -65,6 +69,7 @@ export class NewTask extends React.Component {
     }
 
     async handleCreate(e) {
+
         e.preventDefault();
         const title = this.state.title;
         const description = this.state.description;
@@ -77,15 +82,31 @@ export class NewTask extends React.Component {
             alert("Fill all the spaces!");
             return;
         }
-        let ok = true;
         const self = this;
+        let data = new FormData();
+        data.append('file', this.state.file);
+        let file=null;
+        await this.axios.post('http://localhost:8081/taskPlanner/v1/files', data)
+            .then(function (response) {
+                console.log("file uploaded!", data);
+                file= response.data;
+               // alert("File Uploaded!");
+        })
+        .catch(function (error) {
+            console.log("failed file upload", error);
+            alert("Error failes to uploaded file");
+        });
+
+        let ok = true;
+        
         await this.axios.post('http://localhost:8081/taskPlanner/v1/tasks',{
             title: title,
             description: description,
             status: status,
             dueDate: dueDate,
             priority: priority,
-            responsible: null
+            responsible: null,
+            fileURL:file
         })
             .then(function (response) {
                 alert("Success creation!");
@@ -131,7 +152,7 @@ export class NewTask extends React.Component {
                     <Link to="/taskPlanner" className="btnBack"><ArrowBackIcon style={{color:"#f44336"}}/></Link>
                 </div>
                 <div id="newTodo">    
-                    <Card className="Todo">
+                    <Card className="Todo" style={{marginBottom: "10%"}}>
                         <div style={{textAlign: "center", marginTop:"8%",marginBottom: "5%"}}>
                             <h1>New Task </h1>
                         </div>
@@ -195,6 +216,12 @@ export class NewTask extends React.Component {
                                 margin="normal"
                             >
                             </TextField>
+                            <br></br>
+                            <input style={{marginTop:"7%", marginLeft:"2%"}}
+                                type="file" 
+                                id="file"
+                                onChange={this.handleFile}
+                            />
                             <br></br>
                             <div style={{textAlign: "right"}}>
                                 <div className="btnCreateTask">

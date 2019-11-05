@@ -8,7 +8,7 @@ export class TaskList extends React.Component {
         const tasks = taskList.map((task, i) => (
                 <div style={{marginRight: "15%", marginLeft:"15%"}} key={"task_" + task.id} >
                     <Task key={"task_" + task.id} id={task.id} title={task.title} description={task.description} status={task.status}
-                          priority={task.priority} dueDate={task.dueDate} responsible={task.responsible}/>
+                          priority={task.priority} dueDate={task.dueDate} responsible={task.responsible} file={task.fileURL}/>
                 </div>
             )
         );

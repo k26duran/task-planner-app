@@ -19,7 +19,8 @@ export class Task extends React.Component {
                 status: this.props.status,
                 dueDate: this.props.dueDate,
                 responsible: this.props.responsible,
-                priority:this.props.priority
+                priority:this.props.priority,
+                file:this.props.file
             },
             update: false
         }
@@ -61,6 +62,10 @@ export class Task extends React.Component {
                         < Typography variant="body2" component="p"  >
                             <i>{this.state.task.status} - {this.state.task.dueDate}</i>
                         </Typography >
+                        < div style={{textAlign: "center", marginTop:"2%"}}>
+                            {this.state.task.file ? <img width={"40%"} height={"auto"} src={"http://localhost:8081/taskPlanner/v1/files/" + this.state.task.file} /> : ""}
+                        </div >
+                        
                     </CardContent>
                 </Card>
             </button>
